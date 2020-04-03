@@ -1,7 +1,8 @@
 const bcrypr = require('bcryptjs');
 
-const generateToken = require('../utils/generateToken');
 const User = require('../models/User');
+const generateToken = require('../utils/generateToken');
+const generateHash = require('../utils/generateHash');
 
 module.exports = {
 
@@ -68,6 +69,8 @@ module.exports = {
                 if (newData[property] !== user[property])
                     user[property] = newData[property];
             })
+
+            user.password = await generateHash(user.password);
 
             await User.findByIdAndUpdate(user.id, user);
 
