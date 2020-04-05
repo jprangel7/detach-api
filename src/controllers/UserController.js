@@ -1,6 +1,7 @@
 const bcrypr = require('bcryptjs');
 
 const User = require('../models/User');
+const Item = require('../models/Item');
 const generateToken = require('../utils/generateToken');
 const generateHash = require('../utils/generateHash');
 
@@ -14,6 +15,21 @@ module.exports = {
 
         } catch (err) {
             return response.send(err)
+        }
+    },
+
+    async items(request, response) {
+        try {
+            const items = await Item.find({ user: request.userId });
+            console.log(items);
+
+            if (items.length === 0)
+                return response.status(400).send('No item found');
+
+            return response.status(200).send(items);
+
+        } catch (err) {
+            return response.send(err);
         }
     },
 
